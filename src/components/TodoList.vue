@@ -1,0 +1,141 @@
+<script>
+import axios from "axios";
+import { store } from "../store";
+// import { onMounted } from "vue";
+
+export default {
+    name: "TodoList",
+    props: ['getTodos'],
+
+    data() {
+        return {
+            store
+        }
+    },
+    methods: {
+        //Si assicura che il click non avvenga su router-link
+        handleLiClick(todo) {
+            if (!event.target.closest('a')) {
+                this.updateCompleted(todo);
+            }
+        },
+        //Aggiorna il completed del click
+        updateCompleted(todo) {
+
+            if (this.store.logged_id) {
+                axios.post(`${this.store.baseURL}/endpoints/todos_endpoints.php/update_completed`, {
+                    todo_id: todo.todo_id,
+                    completed: !todo.completed ? 1 : 0
+
+                }, {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                })
+                    .then(response => {
+                        this.errors = [];
+                        console.log('Todo aggiornato');
+                        this.getTodos();
+                    })
+                    .catch(error => {
+                        this.errors = [];
+                        console.log('Errore durante l\'edit', error);
+                        if (error.response) {
+                            this.errors = error.response.data.errors;
+                        }
+
+                    });
+            }
+        }
+
+    }
+
+}
+</script>
+
+<template>
+    <template v-if="!store.logged_id">
+        <h2>ERRORE Non sei Loggato</h2>
+    </template>
+    <template v-else>
+        <div class="todolist-container container d-flex flex-column align-items-center">
+            <!-- TODOS ATTIVI -->
+            <template class="todolist" v-if="store.todos.activeTodos.length > 0">
+                <h2>TODOS ATTIVI</h2>
+                <ul class="list-group list">
+
+                    <template v-for="todo in   store.todos.activeTodos  " :key="todo.todo_id">
+
+                        <li @click="handleLiClick(todo)" class="list-group-item "
+                            :class="todo.completed ? 'completed' : 'incompleted'">
+                            <span class="d-flex justify-content-between">
+                                <span>{{ todo.title }}</span>
+                                <span>
+                                    <i v-if="todo.upcomingExpiration && !todo.completed"
+                                        class="fa-solid fa-triangle-exclamation me-2" style="color: rgb(255, 234, 0);"></i>
+                                    <router-link :to="{ name: 'info-todo', params: { slug: todo.todo_id } }"><i
+                                            class="fa-solid fa-circle-info"></i></router-link>
+                                </span>
+                            </span>
+                        </li>
+                    </template>
+
+                </ul>
+            </template>
+
+            <!-- TODOS SCADUTI -->
+            <template class="todolist" v-if="store.todos.expiredTodos.length > 0">
+                <h2>TODOS SCADUTI</h2>
+
+                <ul class="list-group list">
+                    <template v-for="  todo   in   store.todos.expiredTodos  " :key="todo.todo_id">
+
+                        <li @click="handleLiClick(todo)" class="list-group-item"
+                            :class="todo.completed ? 'completed' : 'expired'">
+                            <span class="d-flex justify-content-between">
+                                <span>{{ todo.title }}</span>
+                                <span>
+
+                                    <i v-if="!todo.completed" class="fa-solid fa-circle-exclamation me-2"
+                                        style="color:red;"></i>
+                                    <router-link :to="{ name: 'info-todo', params: { slug: todo.todo_id } }"><i
+                                            class="fa-solid fa-circle-info"></i></router-link>
+                                </span>
+                            </span>
+                        </li>
+                    </template>
+                </ul>
+            </template>
+        </div>
+
+
+    </template>
+</template>
+
+<style  scoped lang="scss">
+.list {
+    min-width: 30%;
+    max-width: 50%;
+    max-height: 250px;
+    overflow-y: auto;
+
+}
+
+.list::-webkit-scrollbar {
+    display: none;
+    /* Nasconde la scrollbar su browser basati su WebKit (Chrome, Safari, etc.) */
+}
+
+.incompleted {
+    background-color: #90d890;
+}
+
+.completed {
+    background-color: #d1d1d1;
+    text-decoration: line-through;
+}
+
+.expired {
+    background-color: #ff9090;
+}
+</style>
