@@ -5,7 +5,7 @@ import { store } from "../store";
 
 export default {
     name: "TodoList",
-    props: ['getTodos'],
+    props: ['getTodos', 'todos'],
 
     data() {
         return {
@@ -58,55 +58,39 @@ export default {
         <h2>ERRORE Non sei Loggato</h2>
     </template>
     <template v-else>
-        <div class="todolist-container container d-flex flex-column align-items-center">
-            <!-- TODOS ATTIVI -->
-            <template class="todolist" v-if="store.todos.activeTodos.length > 0">
-                <h2>TODOS ATTIVI</h2>
-                <ul class="list-group list">
 
-                    <template v-for="todo in   store.todos.activeTodos  " :key="todo.todo_id">
 
-                        <li @click="handleLiClick(todo)" class="list-group-item"
-                            :class="todo.completed ? 'completed' : 'incompleted'">
-                            <span class="d-flex justify-content-between w-100">
-                                <span class="title">{{ todo.title }}</span>
-                                <span class="text-end">
-                                    <i v-if="todo.upcomingExpiration && !todo.completed"
-                                        class="fa-solid fa-triangle-exclamation " style="color: rgb(255, 234, 0);"></i>
-                                    <router-link :to="{ name: 'info-todo', params: { slug: todo.todo_id } }" class="ms-2"><i
-                                            class="fa-solid fa-circle-info"></i></router-link>
-                                </span>
+
+        <!-- <template class="todo-list-template"> -->
+        <!-- <h2>AAA</h2> -->
+        <template v-if="todos.length > 0">
+            <ul class="list-group list">
+                <template v-for="todo in todos" :key="todo.todo_id">
+                    <li @click="handleLiClick(todo)" class="list-group-item"
+                        :class="todo.expired ? (todo.completed ? 'completed' : 'expired') : (todo.completed ? 'completed' : 'incompleted')">
+                        <span class="d-flex justify-content-between w-100">
+                            <span class="title">{{ todo.title }}</span>
+                            <span class="text-end">
+                                <i v-if="!todo.completed && todo.upcomingExpiration"
+                                    class="fa-solid fa-triangle-exclamation" style="color: rgb(255, 234, 0);"></i>
+                                <i v-if="!todo.completed && todo.expired" class="fa-solid fa-circle-exclamation"
+                                    style="color: red;"></i>
+                                <router-link :to="{ name: 'info-todo', params: { slug: todo.todo_id } }" class="ms-2">
+                                    <i class="fa-solid fa-circle-info"></i>
+                                </router-link>
                             </span>
-                        </li>
-                    </template>
+                        </span>
+                    </li>
+                </template>
+            </ul>
+        </template>
+        <!-- </template> -->
 
-                </ul>
-            </template>
 
-            <!-- TODOS SCADUTI -->
-            <template class="todolist" v-if="store.todos.expiredTodos.length > 0">
-                <h2>TODOS SCADUTI</h2>
 
-                <ul class="list-group list">
-                    <template v-for="  todo   in   store.todos.expiredTodos  " :key="todo.todo_id">
 
-                        <li @click="handleLiClick(todo)" class="list-group-item"
-                            :class="todo.completed ? 'completed' : 'expired'">
-                            <span class="d-flex justify-content-between">
-                                <span class="title">{{ todo.title }}</span>
-                                <span class="text-end">
 
-                                    <i v-if="!todo.completed" class="fa-solid fa-circle-exclamation "
-                                        style="color:red;"></i>
-                                    <router-link :to="{ name: 'info-todo', params: { slug: todo.todo_id } }" class="ms-2"><i
-                                            class="fa-solid fa-circle-info"></i></router-link>
-                                </span>
-                            </span>
-                        </li>
-                    </template>
-                </ul>
-            </template>
-        </div>
+
 
 
     </template>
@@ -114,8 +98,8 @@ export default {
 
 <style  scoped lang="scss">
 .list {
-    min-width: 40%;
-    max-width: 50%;
+    // min-width: 40%;
+    width: 40%;
     max-height: 250px;
     overflow-y: auto;
 

@@ -44,6 +44,8 @@ export default {
           console.log('Registrazione avvenuta con successo');
           this.store.logged_id = response.data.logged_id;
           this.store.username = response.data.username;
+          this.store.notification = 'Registrazione avvenuta con successo';
+
           this.$router.push(`/todos`);
         })
         .catch(error => {
