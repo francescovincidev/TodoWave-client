@@ -47,7 +47,8 @@ export default {
 
                         console.log('Todo aggiornato:', response.data);
                         // this.store.todos = response.data
-                        this.$router.push(`/todos`);
+                        this.$router.push('/todos',);
+                        store.notification = this.todo ? 'Todo aggiornato' : 'Todo creato'
                     })
                     .catch(error => {
                         this.errors = [];
@@ -106,7 +107,7 @@ export default {
 
                         <label>Descrizione</label>
                         <textarea class="form-control" :class="errors.descriptions && !errors.inputs ? 'is-invalid' : ''"
-                            v-model="description" maxlength="255" rows="4"></textarea>
+                            v-model="description" maxlength="1000" rows="4"></textarea>
                         <template v-if="errors && !errors.inputs">
                             <div class="error-message invalid-feedback" role="alert"
                                 v-for="description in errors.descriptions">{{
@@ -196,7 +197,13 @@ export default {
 
         textarea {
             margin-bottom: 20px;
+
+            &::-webkit-scrollbar {
+                display: none;
+                /* Nasconde la scrollbar su browser basati su WebKit (Chrome, Safari, etc.) */
+            }
         }
+
     }
 
 

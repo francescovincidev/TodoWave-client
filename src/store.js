@@ -10,6 +10,7 @@ export const store = reactive({
         activeTodos: [],
         expiredTodos: []
     },
+    notification: '',
     refreshTodos(data) {
         this.todos.activeTodos = [];
         this.todos.expiredTodos = [];
