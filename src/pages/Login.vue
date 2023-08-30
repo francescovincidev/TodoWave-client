@@ -50,14 +50,11 @@ export default {
         <p class="text-center">
             Effettua il login per recuperare la tua todo
         </p>
-        <!-- <div class="row w-100"> -->
-        <!-- <div class="col-2"></div> -->
-        <!-- <div class="col-8 d-flex justify-content-center w-100"> -->
 
         <form @submit.prevent="loginUser" class="center-form">
             <div class="position-relative">
                 <label>Email:</label>
-                <input type="email" class="form-control " :class="errors.emails && !errors.inputs ? 'is-invalid' : ''"
+                <input type="email" class="form-control" :class="errors.emails && !errors.inputs ? 'is-invalid' : ''"
                     v-model="email" required>
                 <template v-if="errors && !errors.inputs">
                     <div class="position-absolute start-50 translate-middle invalid-feedback" role="alert"
@@ -91,8 +88,7 @@ export default {
 
             </div>
         </div>
-        <!-- </div> -->
-        <!-- </div> -->
+
 
     </div>
 </template>
