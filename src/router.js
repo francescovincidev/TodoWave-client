@@ -41,11 +41,11 @@ const router = createRouter({
             name: "edit-todo",
             component: () => import("./pages/EditTodo.vue"),
         },
-        // {
-        //     path: "/posts",
-        //     name: "posts",
-        //     component: () => import("./pages/Filee")-- > lazy loading.Viene caricata solo quando viene clicccato(ricordarsi si levare l'import da sopra )
-        // },
+        {
+            path: "/:pathMatch(.*)*",
+            name: "not-found",
+            component: () => import("./pages/NotFound.vue"),
+        },
     ]
 })
 
