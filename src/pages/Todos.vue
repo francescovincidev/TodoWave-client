@@ -5,6 +5,7 @@ import { reactive, onMounted } from "vue";
 import TodoList from "../components/TodoList.vue";
 import TagModal from "../components/TagModal.vue";
 
+
 export default {
     name: "Todos",
     components: {
@@ -50,7 +51,7 @@ export default {
         },
         getTags() {
             if (this.store.logged_id) {
-
+                this.store.tags = [];
                 axios.get(`${this.store.baseURL}/endpoints/tags_endpoints.php/get`, {
                     params: {
                         user_id: this.store.logged_id
@@ -123,7 +124,8 @@ export default {
         </template>
         <div>
 
-            <router-link :to="{ name: 'create-todo' }" class="btn btn-primary"> Aggiungi todo </router-link>
+            <router-link :to="{ name: 'create-todo' }" class="btn btn-primary" @click="getTags"> Aggiungi todo
+            </router-link>
         </div>
 
         <div>
@@ -149,12 +151,22 @@ export default {
         </div>
 
         <TagModal />
+
+
+        <select class="form-select" id="inputGroupSelect03" aria-label="Example select with button addon">
+            <option selected>Nessuno</option>
+            <option v-for="tag in store.tags" value="1">{{ tag.tag_name }}</option>
+
+        </select>
+
     </template>
 </template>
 <style scoped lang="scss">
 @use "../style/partials/mixins" as *;
 @use "../style/partials/variables" as *;
 @use "../style/general.scss" as *;
+
+
 
 .notification {
     @include animated_upcoming_expiration;

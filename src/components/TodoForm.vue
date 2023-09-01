@@ -14,6 +14,7 @@ export default {
             completed: false,
             errors: {},
             todo: null,
+            selectedTags: [],
             store
 
         }
@@ -157,8 +158,25 @@ export default {
                         </template>
                     </div>
 
+                    <div class="position-relative">
+                        <label for="opzione">Seleziona i tag:</label>
+                        <div class="row mx-auto">
+
+                            <div class="col-6 form-check text-start" v-for="(tag, index) in store.tags" :key="tag.tag_id">
+
+                                <input class="form-check-input" type="checkbox" :value="tag.tag_id"
+                                    :id="'tag-check-' + tag.tag_id" v-model="selectedTags">
+                                <label class="form-check-label w-100" :for="'tag-check-' + tag.tag_id">{{ tag.tag_name
+                                }}</label>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
                     <template v-if="errors">
-                        <div class="text-danger" v-for=" input  in  errors.inputs ">{{ input }}</div>
+                        <div class="text-danger" v-for="   input    in    errors.inputs   ">{{ input }}</div>
                     </template>
 
 
@@ -172,7 +190,15 @@ export default {
 </template>
 
 <style scoped lang="scss">
+.form-check-label {
+    // overflow-wrap: break-word;
+    word-wrap: break-word;
+
+}
+
+
 .infos {
+    max-width: 30%;
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -79,7 +79,7 @@ export default {
 
 <template>
     <button @click="errors = [], tag_name = ''" type="button" class="btn btn-danger" data-bs-toggle="modal"
-        data-bs-target="#addTagModal">
+        data-bs-target="#addTagModal" :disabled="store.tags.length >= 10">
         Aggiungi Tag
     </button>
     <!-- Modal -->
@@ -87,7 +87,7 @@ export default {
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="deleteTodoModalLabel">{{ tag ? `Modifica il tag ${tag.tag_name}` :
+                    <h1 class="modal-title fs-5" id="deleteTodoModalLabel">{{ tag ? `Modifica il tag ${tag.tag_name} ` :
                         'Crea nuovo tag' }}
                     </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -99,7 +99,8 @@ export default {
                             :class="errors && errors.tag_names && !errors.inputs ? 'is-invalid' : ''" v-model="tag_name"
                             minlength="3" maxlength="100" required>
                         <template v-if="errors && !errors.inputs">
-                            <div class="error-message invalid-feedback" role="alert" v-for="  title  in  errors.tag_names ">
+                            <div class="error-message invalid-feedback" role="alert"
+                                v-for="     title     in     errors.tag_names    ">
                                 {{
                                     title }}
                             </div>
