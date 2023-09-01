@@ -28,7 +28,8 @@ export default {
                     console.log('Login avvenuto con successo');
                     this.store.logged_id = response.data.logged_id;
                     this.store.username = response.data.username;
-                    this.store.notification = 'Login avvenuto con successo';
+                    this.store.setNotification('Login avvenuto con successo');
+                    // this.store.notification = 'Login avvenuto con successo';
                     this.$router.push(`/todos`);
                 })
                 .catch(error => {

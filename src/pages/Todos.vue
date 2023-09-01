@@ -3,23 +3,9 @@ import axios from "axios";
 import { store } from "../store";
 import { reactive, onMounted } from "vue";
 import TodoList from "../components/TodoList.vue";
-const state = reactive({
-})
-
-
-
-
-function openModal() {
-    state.modal_demo.show()
-}
-
-function closeModal() {
-    state.modal_demo.hide()
-}
 
 export default {
     name: "Todos",
-    // props: ['modalMessage'],
     components: {
         TodoList
     },
@@ -30,7 +16,7 @@ export default {
             username: '',
             passwordRepeat: '',
             errors: {},
-            showModal: true,
+            // showModal: true,
             store
 
         }
@@ -39,17 +25,18 @@ export default {
         getTodos() {
             if (this.store.logged_id) {
 
-                axios.post(`${this.store.baseURL}/endpoints/todos_endpoints.php/get`, {
-                    user_id: this.store.logged_id
-
-                }, {
+                axios.get(`${this.store.baseURL}/endpoints/todos_endpoints.php/get`, {
+                    params: {
+                        user_id: this.store.logged_id
+                    },
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
+                        'Accept': 'application/json'
                     }
                 })
                     .then(response => {
                         console.log('Todos raccolti:', response.data);
                         const todos = response.data;
+                        console.log(todos);
                         this.store.refreshTodos(todos);
                     })
                     .catch(error => {
@@ -60,18 +47,20 @@ export default {
                     });
             }
         },
-        openModal() {
-            this.showModal = true;
-        },
+        logoutUser() {
+            this.store.logged_id = null;
+            this.store.username = null;
+            this.store.todos.activeTodos = [];
+            this.store.todos.expiredTodos = [];
+            this.store.setNotification('Logout eseguito');
+
+            // store.notification = 'Logout eseguito'
+
+        }
 
     },
     mounted() {
         this.getTodos();
-        // setTimeout(this.store.notification = '', 10000); // Chiudi il modal dopo 3 secondi
-        setTimeout(() => {
-            this.store.notification = '';
-        }, 7000);
-
     }
 
 
@@ -105,6 +94,12 @@ export default {
 
             <router-link :to="{ name: 'create-todo' }" class="btn btn-primary"> Aggiungi todo </router-link>
         </div>
+
+        <div>
+            <router-link :to="{ name: 'home' }" class="btn btn-primary" @click="logoutUser">
+                Logout </router-link>
+
+        </div>
         <div v-if="store.notification" class=" bg-success-subtle border-success rounded notification">
             {{ store.notification }}
         </div>
@@ -112,39 +107,12 @@ export default {
 
     </template>
 </template>
-<style lang="scss">
+<style scoped lang="scss">
+@use "../style/partials/mixins" as *;
+@use "../style/partials/variables" as *;
+@use "../style/general.scss" as *;
+
 .notification {
-    position: fixed;
-    top: -100px;
-    left: 50%;
-    transform: translateX(-50%);
-    // background-color: #333;
-    // color: #fff;
-    padding: 10px 20px;
-    // border-radius: 5px;
-    animation: notification 3s ease-in-out;
-}
-
-@keyframes notification {
-    0% {
-        top: -100px;
-        opacity: 0;
-    }
-
-    20% {
-        top: 20px;
-        opacity: 1;
-    }
-
-    80% {
-        top: 20px;
-        opacity: 1;
-    }
-
-    100% {
-        top: -100px;
-        opacity: 0;
-    }
-
+    @include animated_notification;
 }
 </style>

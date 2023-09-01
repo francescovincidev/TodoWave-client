@@ -12,11 +12,21 @@ export default {
             store
         };
     },
-    components: { RouterLink }
+    components: { RouterLink },
+
+    mounted() {
+        // this.getTodos();
+        // setTimeout(this.store.notification = '', 10000); // Chiudi il modal dopo 3 secondi
+        // setTimeout(() => {
+        //     this.store.notification = '';
+        // }, 4000);
+
+    }
 }
 </script>
 
 <template>
+    <!-- <div class="lamo">lamo</div> -->
     <h1>TodoWave</h1>
     <h4>Ciao e benvenuto su TodoWave, dove le tue attività incontrano la semplicità!</h4>
     <p>Hai mai avuto quella lista interminabile di cose da fare? Tranquillo, siamo qui per rendere tutto più facile e
@@ -44,14 +54,27 @@ export default {
         </div>
 
     </div>
+
+    <div v-if="store.notification" class=" bg-success-subtle border-success rounded notification">
+        {{ store.notification }}
+    </div>
 </template>
 
-<style class="scss">
+<style scoped lang="scss">
+@use "../style/partials/mixins" as *;
+@use "../style/partials/variables" as *;
+@use "../style/general.scss" as *;
+
+
 h4 {
     text-align: center;
     margin-bottom: 2rem;
     margin-top: 2rem;
 
+}
+
+.notification {
+    @include animated_notification;
 }
 
 p {

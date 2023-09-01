@@ -48,6 +48,24 @@ export const store = reactive({
 
             }
         });
+    },
+
+    timeout: null,
+    setNotification(notification) {
+
+        this.notification = notification;
+
+        if (this.timeout) {
+            clearTimeout(this.timeout);
+        }
+
+        // Imposta un nuovo timeout
+        this.timeout = setTimeout(() => {
+            this.notification = '';
+        }, 4000);
     }
+
+
+
 
 });

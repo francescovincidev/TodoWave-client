@@ -29,17 +29,23 @@ export default {
                     completed: this.completed ? 1 : 0
                 };
 
+                let endpoint = '';
                 if (this.todo) {
                     // Aggiungi il campo todo_id se this.todo è definito
                     payload.todo_id = this.todo.todo_id;
+                    endpoint = `/update`;
                 } else {
                     // Aggiungi il campo user_id se this.todo non è definito
                     payload.user_id = this.store.logged_id;
+                    endpoint = '/create';
                 }
 
-                axios.post(`${this.store.baseURL}/endpoints/todos_endpoints.php${this.todo ? '/update' : '/create'}`, payload, {
+                axios({
+                    method: this.todo ? 'PUT' : 'POST',
+                    url: `${this.store.baseURL}/endpoints/todos_endpoints.php${endpoint}`,
+                    data: payload,
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
+                        'Content-Type': 'application/json'
                     }
                 })
                     .then(response => {
@@ -47,8 +53,11 @@ export default {
 
                         console.log('Todo aggiornato:', response.data);
                         // this.store.todos = response.data
+                        this.store.setNotification(this.todo ? 'Todo aggiornato' : 'Todo creato');
+
                         this.$router.push('/todos',);
-                        store.notification = this.todo ? 'Todo aggiornato' : 'Todo creato'
+
+                        // store.notification = this.todo ? 'Todo aggiornato' : 'Todo creato'
                     })
                     .catch(error => {
                         this.errors = [];
@@ -93,10 +102,11 @@ export default {
 
                     <div class="position-relative">
                         <label>Titolo</label>
-                        <input type="text" class="form-control" :class="errors.titles && !errors.inputs ? 'is-invalid' : ''"
-                            v-model="title" minlength="3" maxlength="100" required>
+                        <input type="text" class="form-control"
+                            :class="errors && errors.titles && !errors.inputs ? 'is-invalid' : ''" v-model="title"
+                            minlength="3" maxlength="100" required>
                         <template v-if="errors && !errors.inputs">
-                            <div class="error-message invalid-feedback" role="alert" v-for=" title in errors.titles">{{
+                            <div class="error-message invalid-feedback" role="alert" v-for="  title  in  errors.titles ">{{
                                 title }}
                             </div>
                         </template>
@@ -106,11 +116,12 @@ export default {
                     <div class="position-relative">
 
                         <label>Descrizione</label>
-                        <textarea class="form-control" :class="errors.descriptions && !errors.inputs ? 'is-invalid' : ''"
+                        <textarea class="form-control"
+                            :class="errors && errors.descriptions && !errors.inputs ? 'is-invalid' : ''"
                             v-model="description" maxlength="1000" rows="4"></textarea>
                         <template v-if="errors && !errors.inputs">
                             <div class="error-message invalid-feedback" role="alert"
-                                v-for="description in errors.descriptions">{{
+                                v-for=" description  in  errors.descriptions ">{{
                                     description }}</div>
                         </template>
                     </div>
@@ -121,10 +132,11 @@ export default {
 
                                 <label for="">Scadenza</label>
                                 <input type="date" class="form-control"
-                                    :class="errors.deadlines && !errors.inputs ? 'is-invalid' : ''" v-model="deadline">
+                                    :class="errors && errors.deadlines && !errors.inputs ? 'is-invalid' : ''"
+                                    v-model="deadline">
                                 <template v-if="errors && !errors.inputs">
                                     <div class="error-message invalid-feedback" role="alert"
-                                        v-for="deadline in errors.deadlines">{{
+                                        v-for=" deadline  in  errors.deadlines ">{{
                                             deadline }}</div>
                                 </template>
                             </span>
@@ -137,16 +149,17 @@ export default {
                     <div class="position-relative">
                         <label for="opzione">Todo già completata?:</label>
                         <input type="checkbox" id="completed"
-                            :class="errors.completeds && !errors.inputs ? 'is-invalid' : ''" name="completed"
+                            :class="errors && errors.completeds && !errors.inputs ? 'is-invalid' : ''" name="completed"
                             v-model="completed">
                         <template v-if="errors && !errors.inputs">
-                            <div class="error-message invalid-feedback" role="alert" v-for="completed in errors.completeds">
+                            <div class="error-message invalid-feedback" role="alert"
+                                v-for=" completed  in  errors.completeds ">
                                 {{ completed }}</div>
                         </template>
                     </div>
 
                     <template v-if="errors">
-                        <div class="text-danger" v-for="input in errors.inputs">{{ input }}</div>
+                        <div class="text-danger" v-for=" input  in  errors.inputs ">{{ input }}</div>
                     </template>
 
                     <!-- <template v-if="errors">

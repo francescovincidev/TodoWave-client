@@ -15,18 +15,23 @@ export default {
     },
     methods: {
         deleteTodo() {
-            axios.post(`${this.store.baseURL}/endpoints/todos_endpoints.php/delete`, {
-                todo_id: this.todo.todo_id
-            }, {
+            console.log(this.todo.todo_id)
+            axios.delete(`${this.store.baseURL}/endpoints/todos_endpoints.php/delete`, {
+                data: {
+                    todo_id: this.todo.todo_id
+                },
+
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
+                    'Content-Type': 'application/json'
                 }
             })
                 .then(response => {
                     this.errors = [];
 
                     console.log('Todo eliminato', response.data);
-                    store.notification = 'Todo eliminato'
+                    this.store.setNotification('Todo eliminato');
+
+                    // store.notification = 'Todo eliminato'
 
                     // this.store.todos = response.data
                     this.$router.push(`/todos`);

@@ -1,0 +1,30 @@
+@mixin animated_notification {
+    position: fixed;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    animation: notification 3s ease-in-out;
+
+    @keyframes notification {
+        0% {
+            top: -100px;
+            opacity: 0;
+        }
+
+        20% {
+            top: 20px;
+            opacity: 1;
+        }
+
+        80% {
+            top: 20px;
+            opacity: 1;
+        }
+
+        100% {
+            top: -100px;
+            opacity: 0;
+        }
+    }
+}

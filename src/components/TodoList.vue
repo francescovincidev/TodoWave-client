@@ -23,13 +23,14 @@ export default {
         updateCompleted(todo) {
 
             if (this.store.logged_id) {
-                axios.post(`${this.store.baseURL}/endpoints/todos_endpoints.php/update_completed`, {
+                axios.put(`${this.store.baseURL}/endpoints/todos_endpoints.php/update_completed`, {
                     todo_id: todo.todo_id,
                     completed: !todo.completed ? 1 : 0
 
                 }, {
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
+                        'Content-Type': 'application/json'
+
                     }
                 })
                     .then(response => {
