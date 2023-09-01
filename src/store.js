@@ -12,10 +12,11 @@ export const store = reactive({
     },
     notification: '',
     error: '',
+    upcomingExpirationCount: 0,
     refreshTodos(data) {
         this.todos.activeTodos = [];
         this.todos.expiredTodos = [];
-
+        this.upcomingExpirationCount = 0;
         const currentDate = new Date();
 
         data.forEach(todo => {
@@ -29,7 +30,7 @@ export const store = reactive({
                     this.todos.expiredTodos.push(todo);
                 } else if (targetDate <= threeDaysBefore) {
                     todo.upcomingExpiration = true;
-
+                    this.upcomingExpirationCount++;
                     this.todos.activeTodos.push(todo);
 
                 } else {

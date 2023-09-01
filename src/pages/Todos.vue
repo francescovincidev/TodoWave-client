@@ -16,6 +16,7 @@ export default {
             username: '',
             passwordRepeat: '',
             errors: {},
+            // upcomingExpirationCount: null,
             store
 
         }
@@ -59,6 +60,7 @@ export default {
     },
     mounted() {
         this.getTodos();
+        // this.upcomingExpirationCount = this.store.todos.activeTodos.filter(todo => todo.upcomingExpiration).length;
     }
 
 
@@ -100,7 +102,20 @@ export default {
         </div>
 
 
+        <div v-if="store.upcomingExpirationCount" class=" text-center bg-danger-subtle border-danger rounded notification">
+            <div><i class="fa-solid fa-triangle-exclamation" style="color: red;"></i> <i
+                    class="fa-solid fa-triangle-exclamation" style="color: red;"></i> <i
+                    class="fa-solid fa-triangle-exclamation" style="color: red;"></i></div>
+            <span style="white-space: nowrap;">
 
+                Hai {{ store.upcomingExpirationCount }} Todo che scadono entro 3 giorni!!!
+            </span>
+            <div>
+                <i class="fa-solid fa-triangle-exclamation" style="color: red;"></i> <i
+                    class="fa-solid fa-triangle-exclamation" style="color: red;"></i> <i
+                    class="fa-solid fa-triangle-exclamation" style="color: red;"></i>
+            </div>
+        </div>
     </template>
 </template>
 <style scoped lang="scss">
@@ -109,6 +124,12 @@ export default {
 @use "../style/general.scss" as *;
 
 .notification {
-    @include animated_notification;
+    @include animated_upcoming_expiration;
+
+    span {
+        white-space: nowrap;
+    }
+
+    // left: 75%;
 }
 </style>

@@ -44,7 +44,6 @@ export default {
           this.store.logged_id = response.data.logged_id;
           this.store.username = response.data.username;
           this.store.setNotification(response.data.message);
-
           this.$router.push(`/todos`);
         })
         .catch(error => {
