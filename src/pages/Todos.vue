@@ -3,11 +3,12 @@ import axios from "axios";
 import { store } from "../store";
 import { reactive, onMounted } from "vue";
 import TodoList from "../components/TodoList.vue";
+import TagModal from "../components/TagModal.vue";
 
 export default {
     name: "Todos",
     components: {
-        TodoList
+        TodoList, TagModal
     },
     data() {
         return {
@@ -15,13 +16,14 @@ export default {
             password: '',
             username: '',
             passwordRepeat: '',
-            errors: {},
+            errors: [],
             // upcomingExpirationCount: null,
             store
 
         }
     },
     methods: {
+
         getTodos() {
             if (this.store.logged_id) {
 
@@ -46,6 +48,33 @@ export default {
                     });
             }
         },
+        getTags() {
+            if (this.store.logged_id) {
+
+                axios.get(`${this.store.baseURL}/endpoints/tags_endpoints.php/get`, {
+                    params: {
+                        user_id: this.store.logged_id
+                    },
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                })
+                    .then(response => {
+                        console.log('Todos raccolti:', response.data);
+                        this.store.tags = response.data;
+
+                        // const todos = response.data;
+
+                        // this.store.refreshTodos(todos);
+                    })
+                    .catch(error => {
+                        this.store.setError(error.response.data.error);
+
+
+                    });
+            }
+
+        },
         logoutUser() {
             this.store.logged_id = null;
             this.store.username = null;
@@ -60,6 +89,8 @@ export default {
     },
     mounted() {
         this.getTodos();
+        this.getTags();
+
         // this.upcomingExpirationCount = this.store.todos.activeTodos.filter(todo => todo.upcomingExpiration).length;
     }
 
@@ -116,6 +147,8 @@ export default {
                     class="fa-solid fa-triangle-exclamation" style="color: red;"></i>
             </div>
         </div>
+
+        <TagModal />
     </template>
 </template>
 <style scoped lang="scss">

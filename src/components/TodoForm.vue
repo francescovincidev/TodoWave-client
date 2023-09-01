@@ -161,14 +161,6 @@ export default {
                         <div class="text-danger" v-for=" input  in  errors.inputs ">{{ input }}</div>
                     </template>
 
-                    <!-- <template v-if="errors">
-                    <div v-for="password in errors.passwords">{{ password }}</div>
-                </template> -->
-
-                    <!-- <template v-if="errors">
-                    <div v-for="password in errors.inputs">{{ password }}</div>
-                </template> -->
-
 
                     <button type="submit" class=" btn btn-primary mt-3">{{ todo ? 'Modifila' : 'Crea' }}</button>
                 </form>

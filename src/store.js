@@ -10,6 +10,7 @@ export const store = reactive({
         activeTodos: [],
         expiredTodos: []
     },
+    tags: [],
     notification: '',
     error: '',
     upcomingExpirationCount: 0,
