@@ -24,6 +24,7 @@ export default {
 
             if (this.store.logged_id) {
                 axios.put(`${this.store.baseURL}/endpoints/todos_endpoints.php/update_completed`, {
+                    user_id: this.store.logged_id,
                     todo_id: todo.todo_id,
                     completed: !todo.completed ? 1 : 0
 
@@ -35,12 +36,14 @@ export default {
                 })
                     .then(response => {
                         this.errors = [];
-                        console.log('Todo aggiornato');
+                        // console.log('Todo aggiornato');
                         this.getTodos();
                     })
                     .catch(error => {
                         this.errors = [];
-                        console.log('Errore durante l\'edit', error);
+
+                        this.store.setError(error.response.data.error);
+
                         if (error.response) {
                             this.errors = error.response.data.errors;
                         }

@@ -41,20 +41,16 @@ export default {
       })
         .then(response => {
           this.errors = [];
-          console.log('Registrazione avvenuta con successo');
           this.store.logged_id = response.data.logged_id;
           this.store.username = response.data.username;
-          this.store.setNotification('Registrazione avvenuta con successo');
-
-
-          // this.store.notification = 'Registrazione avvenuta con successo';
+          this.store.setNotification(response.data.message);
 
           this.$router.push(`/todos`);
         })
         .catch(error => {
           this.errors = [];
+          this.store.setError(error.response.data.error);
 
-          console.log('Errore durante la registrazione:', error);
           if (error.response) {
             this.errors = error.response.data.errors;
           }

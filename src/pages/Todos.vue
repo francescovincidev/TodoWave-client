@@ -16,7 +16,6 @@ export default {
             username: '',
             passwordRepeat: '',
             errors: {},
-            // showModal: true,
             store
 
         }
@@ -36,14 +35,13 @@ export default {
                     .then(response => {
                         console.log('Todos raccolti:', response.data);
                         const todos = response.data;
-                        console.log(todos);
+
                         this.store.refreshTodos(todos);
                     })
                     .catch(error => {
-                        // this.errors = [];
-                        console.log('Errore durante il todos', error);
+                        this.store.setError(error.response.data.error);
 
-                        // this.errors = error.response.data.errors;
+
                     });
             }
         },
@@ -100,9 +98,7 @@ export default {
                 Logout </router-link>
 
         </div>
-        <div v-if="store.notification" class=" bg-success-subtle border-success rounded notification">
-            {{ store.notification }}
-        </div>
+
 
 
     </template>

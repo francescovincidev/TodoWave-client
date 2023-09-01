@@ -2,7 +2,7 @@
 import axios from "axios";
 import { store } from "../store";
 import { onMounted } from "vue";
-import { RouterLink } from "vue-router";
+// import { RouterLink } from "vue-router";
 // import TodoList from "../components/TodoList.vue";
 
 export default {
@@ -12,14 +12,9 @@ export default {
             store
         };
     },
-    components: { RouterLink },
+    // components: { RouterLink },
 
     mounted() {
-        // this.getTodos();
-        // setTimeout(this.store.notification = '', 10000); // Chiudi il modal dopo 3 secondi
-        // setTimeout(() => {
-        //     this.store.notification = '';
-        // }, 4000);
 
     }
 }
@@ -54,10 +49,6 @@ export default {
         </div>
 
     </div>
-
-    <div v-if="store.notification" class=" bg-success-subtle border-success rounded notification">
-        {{ store.notification }}
-    </div>
 </template>
 
 <style scoped lang="scss">
@@ -71,10 +62,6 @@ h4 {
     margin-bottom: 2rem;
     margin-top: 2rem;
 
-}
-
-.notification {
-    @include animated_notification;
 }
 
 p {

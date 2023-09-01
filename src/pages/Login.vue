@@ -25,16 +25,15 @@ export default {
             })
                 .then(response => {
                     this.errors = [];
-                    console.log('Login avvenuto con successo');
                     this.store.logged_id = response.data.logged_id;
                     this.store.username = response.data.username;
-                    this.store.setNotification('Login avvenuto con successo');
-                    // this.store.notification = 'Login avvenuto con successo';
+                    this.store.setNotification(response.data.message);
                     this.$router.push(`/todos`);
                 })
                 .catch(error => {
                     this.errors = [];
-                    console.log('Errore durante il login:', error);
+                    this.store.setError(error.response.data.error);
+
                     if (error.response) {
                         this.errors = error.response.data.errors;
                     }
@@ -95,22 +94,4 @@ export default {
     </div>
 </template>
 
-<style scoped lang="scss">
-// .container {
-//     display: flex;
-//     flex-direction: column;
-//     align-items: center;
-
-//     .center-form {
-//         text-align: center;
-//         display: flex;
-//         flex-direction: column;
-
-//         /* Centrare gli elementi interni orizzontalmente */
-//         input {
-//             margin-bottom: 20px;
-//         }
-//     }
-
-// }
-</style>
+<style scoped lang="scss"></style>

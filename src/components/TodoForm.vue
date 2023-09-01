@@ -33,6 +33,7 @@ export default {
                 if (this.todo) {
                     // Aggiungi il campo todo_id se this.todo è definito
                     payload.todo_id = this.todo.todo_id;
+                    payload.user_id = this.store.logged_id;
                     endpoint = `/update`;
                 } else {
                     // Aggiungi il campo user_id se this.todo non è definito
@@ -51,17 +52,15 @@ export default {
                     .then(response => {
                         this.errors = [];
 
-                        console.log('Todo aggiornato:', response.data);
-                        // this.store.todos = response.data
-                        this.store.setNotification(this.todo ? 'Todo aggiornato' : 'Todo creato');
+                        this.store.setNotification(response.data.message);
 
                         this.$router.push('/todos',);
 
-                        // store.notification = this.todo ? 'Todo aggiornato' : 'Todo creato'
                     })
                     .catch(error => {
                         this.errors = [];
-                        console.log('Errore durante l\'edit', error);
+                        this.store.setError(error.response.data.error);
+
                         if (error.response) {
                             this.errors = error.response.data.errors;
                         }
