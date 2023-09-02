@@ -4,12 +4,13 @@ import { store } from "../store";
 import { reactive, onMounted } from "vue";
 import TodoList from "../components/TodoList.vue";
 import TagModal from "../components/TagModal.vue";
+// import TagDeleteModal from "../components/TagDeleteModal.vue"
 
 
 export default {
     name: "Todos",
     components: {
-        TodoList, TagModal
+        TodoList, TagModal,
     },
     data() {
         return {
@@ -18,6 +19,12 @@ export default {
             username: '',
             passwordRepeat: '',
             errors: [],
+            selectedTag: {
+                tag: null,
+                activeTodos: [],
+                expiredTodos: [],
+
+            },
             // upcomingExpirationCount: null,
             store
 
@@ -25,7 +32,7 @@ export default {
     },
     methods: {
 
-        getTodos() {
+        getTodos(tag_id = null) {
             if (this.store.logged_id) {
 
                 axios.get(`${this.store.baseURL}/endpoints/todos_endpoints.php/get`, {
@@ -40,7 +47,7 @@ export default {
                         console.log('Todos raccolti:', response.data);
                         const todos = response.data;
 
-                        this.store.refreshTodos(todos);
+                        this.store.refreshTodos(todos, tag_id);
                     })
                     .catch(error => {
                         this.store.setError(error.response.data.error);
@@ -61,9 +68,9 @@ export default {
                     }
                 })
                     .then(response => {
-                        console.log('Todos raccolti:', response.data);
+                        console.log('Tags raccolti:', response.data);
                         this.store.tags = response.data;
-
+                        console.log(response.data);
                         // const todos = response.data;
 
                         // this.store.refreshTodos(todos);
@@ -81,11 +88,35 @@ export default {
             this.store.username = null;
             this.store.todos.activeTodos = [];
             this.store.todos.expiredTodos = [];
+            this.store.tags = [];
             this.store.setNotification('Logout eseguito');
 
             // store.notification = 'Logout eseguito'
 
-        }
+        },
+        filterTodos() {
+
+
+            if (this.selectedTag.tag) {
+                // this.getTodos()
+                // Se nessun tag è selezionato, mostra tutti i todo
+                // Altrimenti, filtra i todo per il tag selezionato
+                this.selectedTag.activeTodos = this.store.todos.activeTodos.filter(todo => {
+                    return todo.tags.some(tag => tag.tag_id === this.selectedTag.tag.tag_id);
+                });
+                this.selectedTag.expiredTodos = this.store.todos.expiredTodos.filter(todo => {
+                    return todo.tags.some(tag => tag.tag_id === this.selectedTag.tag.tag_id);
+                });
+
+            } else {
+                this.selectedTag.activeTodos = [];
+                this.selectedTag.expiredTodos = [];
+
+            }
+            // this.getTodos()
+
+
+        },
 
     },
     mounted() {
@@ -104,17 +135,25 @@ export default {
         <h2>ERRORE Non sei Loggato</h2>
     </template>
     <template v-else>
-        <template v-if="store.todos.activeTodos.length > 0 || store.todos.expiredTodos.length > 0">
+        <template v-if="store.todos.activeTodos.length > 0 || store.todos.expiredTodos.length > 0 || store.tags">
             <h2>Ben tornato {{ store.username }} </h2>
             <div class="d-flex flex-column align-items-center">
-                <template v-if="store.todos.activeTodos.length > 0">
+
+                <h2 v-if="selectedTag.tag">{{ (selectedTag.activeTodos.length > 0 || selectedTag.expiredTodos.length > 0) ?
+                    `Ecco i Todo filtrati per:
+                    ${selectedTag.tag.tag_name}` : `Nessun Todo con tag: ${selectedTag.tag.tag_name}` }}</h2>
+
+                <template v-if="selectedTag.tag ? selectedTag.activeTodos.length > 0 : store.todos.activeTodos.length > 0">
                     <h1>TODO ATTIVI</h1>
-                    <TodoList :getTodos="getTodos" :todos="store.todos.activeTodos" />
+                    <TodoList :getTodos="getTodos"
+                        :todos="selectedTag.tag ? selectedTag.activeTodos : store.todos.activeTodos" />
                 </template>
-                <template v-if="store.todos.expiredTodos.length > 0">
+                <template
+                    v-if="selectedTag.tag ? selectedTag.expiredTodos.length > 0 : store.todos.expiredTodos.length > 0">
                     <h1 class="mt-1">TODO SCADUTI</h1>
 
-                    <TodoList :getTodos="getTodos" :todos="store.todos.expiredTodos" />
+                    <TodoList :getTodos="getTodos"
+                        :todos="selectedTag.tag ? selectedTag.expiredTodos : store.todos.expiredTodos" />
                 </template>
             </div>
         </template>
@@ -150,12 +189,14 @@ export default {
             </div>
         </div>
 
-        <TagModal />
+        <TagModal :getTags="getTags" />
+        <!-- <TagDeleteModal :getTags="getTags" /> -->
 
 
-        <select class="form-select" id="inputGroupSelect03" aria-label="Example select with button addon">
-            <option selected>Nessuno</option>
-            <option v-for="tag in store.tags" value="1">{{ tag.tag_name }}</option>
+        <select class="form-select" id="inputGroupSelect03" aria-label="Example select with button addon"
+            v-model="selectedTag.tag" @change="filterTodos">
+            <option :value=null selected>Nessuno</option>
+            <option v-for="(tag, index) in store.tags" :key="tag.tag_id" :value="tag">{{ tag.tag_name }}</option>
 
         </select>
 

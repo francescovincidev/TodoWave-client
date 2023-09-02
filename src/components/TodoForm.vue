@@ -15,6 +15,7 @@ export default {
             errors: {},
             todo: null,
             selectedTags: [],
+            // removedTags: [],
             store
 
         }
@@ -27,7 +28,9 @@ export default {
                     title: this.title,
                     description: this.description,
                     deadline: this.deadline ? this.deadline : 0,
-                    completed: this.completed ? 1 : 0
+                    completed: this.completed ? 1 : 0,
+                    tags_add: this.selectedTags,
+                    tags_remove: this.store.tags.filter(tag => !this.selectedTags.includes(tag.tag_id)).map(tag => tag.tag_id)
                 };
 
                 let endpoint = '';
@@ -52,7 +55,7 @@ export default {
                 })
                     .then(response => {
                         this.errors = [];
-
+                        // console.log(response.data);
                         this.store.setNotification(response.data.message);
 
                         this.$router.push('/todos',);
@@ -81,6 +84,7 @@ export default {
             this.description = this.todo.description;
             this.deadline = this.todo.deadline;
             this.completed = this.todo.completed ? true : false;
+            this.selectedTags = this.todo.tags.map(tag => tag.tag_id);
         }
     }
 
@@ -166,7 +170,7 @@ export default {
 
                                 <input class="form-check-input" type="checkbox" :value="tag.tag_id"
                                     :id="'tag-check-' + tag.tag_id" v-model="selectedTags">
-                                <label class="form-check-label w-100" :for="'tag-check-' + tag.tag_id">{{ tag.tag_name
+                                <label class=" form-check-label w-100" :for="'tag-check-' + tag.tag_id">{{ tag.tag_name
                                 }}</label>
 
                             </div>
@@ -180,7 +184,7 @@ export default {
                     </template>
 
 
-                    <button type="submit" class=" btn btn-primary mt-3">{{ todo ? 'Modifila' : 'Crea' }}</button>
+                    <button type="submit" class=" btn btn-primary mt-3">{{ todo ? 'Modifica' : 'Crea' }}</button>
                 </form>
 
 

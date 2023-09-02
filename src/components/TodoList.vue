@@ -64,9 +64,6 @@ export default {
     <template v-else>
 
 
-
-        <!-- <template class="todo-list-template"> -->
-        <!-- <h2>AAA</h2> -->
         <template v-if="todos.length > 0">
             <ul class="list-group list">
                 <template v-for="todo in todos" :key="todo.todo_id">

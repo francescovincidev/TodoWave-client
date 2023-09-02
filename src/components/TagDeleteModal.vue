@@ -4,8 +4,8 @@ import { store } from "../store";
 // import { onMounted } from "vue";
 
 export default {
-    name: "TagModal",
-    props: ['getTags'],
+    name: "TagDeleteModal",
+    props: ['getTags', 'todos'],
 
     data() {
         return {
@@ -50,7 +50,7 @@ export default {
 
                         this.store.setNotification(response.data.message);
 
-                        this.getTags();
+                        this.getTags;
 
                         // this.$router.push('/todos',);
 
@@ -80,12 +80,12 @@ export default {
 </script>
 
 <template>
-    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addTagModal"
-        :disabled="store.tags.length >= 10">
-        Aggiungi Tag
+    <button @click="errors = [], tag_name = ''" type="button" class="btn btn-danger" data-bs-toggle="modal"
+        data-bs-target="#deleteTagModal" :disabled="store.tags.length = 0">
+        Elimina Tag
     </button>
     <!-- Modal -->
-    <div class="modal fade" id="addTagModal" tabindex="-1" aria-labelledby="deleteTodoModalLabel" aria-hidden="true">
+    <div class="modal fade" id="adeleteTagModal" tabindex="-1" aria-labelledby="deleteTodoModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -95,19 +95,19 @@ export default {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="position-relative">
-                        <label>Nome tag</label>
-                        <input type="text" class="form-control"
-                            :class="errors && errors.tag_names && !errors.inputs ? 'is-invalid' : ''" v-model="tag_name"
-                            minlength="3" maxlength="100" required>
-                        <template v-if="errors && !errors.inputs">
-                            <div class="error-message invalid-feedback" role="alert"
-                                v-for="     title     in     errors.tag_names    ">
-                                {{
-                                    title }}
-                            </div>
-                        </template>
+                    <div class="position-relative container">
+                        <label for="opzione">Seleziona i tag:</label>
+                        <div class="row mx-auto">
 
+                            <div class="col-6 form-check text-start" v-for="(tag, index) in store.tags" :key="tag.tag_id">
+
+                                <input class="form-check-input" type="checkbox" :value="tag.tag_id"
+                                    :id="'tag-check-' + tag.tag_id" v-model="selectedTags">
+                                <label class=" form-check-label w-100" :for="'tag-check-' + tag.tag_id">{{ tag.tag_name
+                                }}</label>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
