@@ -75,7 +75,6 @@ p {
 }
 
 .cta-buttons {
-    /* color: #3a6f81; */
     font-size: 0.9rem;
     width: 80%;
     margin: 0 auto;

@@ -1,6 +1,12 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomePage from './pages/HomePage.vue'
-// import Login from './pages/Login.vue'
+import Login from './pages/Login.vue'
+import RegisterVue from "./pages/Register.vue";
+import Todos from "./pages/Todos.vue";
+import CreateTodo from "./pages/CreateTodo.vue";
+import InfoTodo from "./pages/InfoTodo.vue";
+import EditTodo from "./pages/EditTodo.vue";
+
 
 
 const router = createRouter({
@@ -14,32 +20,32 @@ const router = createRouter({
         {
             path: "/login",
             name: "login",
-            component: () => import("./pages/Login.vue")
+            component: Login
         },
         {
             path: "/register",
             name: "register",
-            component: () => import("./pages/Register.vue")
+            component: RegisterVue
         },
         {
             path: "/todos",
             name: "todos",
-            component: () => import("./pages/Todos.vue")
+            component: Todos
         },
         {
             path: "/create-todo",
             name: "create-todo",
-            component: () => import("./pages/CreateTodo.vue")
+            component: CreateTodo
         },
         {
             path: "/info-todo/:slug",
             name: "info-todo",
-            component: () => import("./pages/InfoTodo.vue"),
+            component: InfoTodo
         },
         {
             path: "/edit-todo/:slug",
             name: "edit-todo",
-            component: () => import("./pages/EditTodo.vue"),
+            component: EditTodo
         },
         {
             path: "/:pathMatch(.*)*",

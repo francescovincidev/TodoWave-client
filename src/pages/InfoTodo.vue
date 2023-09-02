@@ -76,6 +76,9 @@ export default {
             <div>
                 Completato? {{ todo.completed ? 'Si' : 'No' }}
             </div>
+            <div>
+                Tag: <span class="badge bg-secondary me-2" v-for="tag in todo.tags">{{ tag.tag_name }} </span>
+            </div>
             <div v-if="todo.upcomingExpiration && !todo.completed">
                 ATTENZIONE SCADE ENTRO TRE GIORNI
             </div>
