@@ -51,6 +51,7 @@ export default {
                         this.store.setNotification(response.data.message);
 
                         this.getTags();
+                        this.tag_name = '';
 
                         // this.$router.push('/todos',);
 
@@ -80,10 +81,6 @@ export default {
 </script>
 
 <template>
-    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addTagModal"
-        :disabled="store.tags.length >= 10">
-        Aggiungi Tag
-    </button>
     <!-- Modal -->
     <div class="modal fade" id="addTagModal" tabindex="-1" aria-labelledby="deleteTodoModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -124,4 +121,9 @@ export default {
 @use "../style/partials/mixins" as *;
 @use "../style/partials/variables" as *;
 @use "../style/general.scss" as *;
+
+.position-fixed {
+    bottom: 40%;
+    left: 3%;
+}
 </style>
