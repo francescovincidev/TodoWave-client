@@ -25,6 +25,7 @@ export default {
                 expiredTodos: [],
 
             },
+
             // upcomingExpirationCount: null,
             store
 
@@ -136,9 +137,11 @@ export default {
     </template>
     <template v-else>
 
-        <h3>{{ store.todos.activeTodos.length > 0 || store.todos.expiredTodos.length > 0 || store.tags ? `Ben
+        <h3 class="ms-4 mt-4">{{ store.todos.activeTodos.length || store.todos.expiredTodos.length ||
+            store.tags.length ?
+            `Ben
             tornato ${store.username} ` : `Benvenuto ${store.username} non hai ancora Todo. Aggiungine qualcuno` }}</h3>
-        <div class="d-flex flex-column align-items-center">
+        <div class=" d-flex flex-column align-items-center">
 
             <h3 v-if="selectedTag.tag">{{ (selectedTag.activeTodos.length > 0 || selectedTag.expiredTodos.length > 0) ?
                 `Ecco i Todo filtrati per:
@@ -160,21 +163,22 @@ export default {
 
 
         <div class="dropdown position-fixed">
-            <button class="btn menu dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Dropdown button
+            <button class=" btn menu dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Menu
             </button>
-            <ul class="dropdown-menu">
-                <li class="m-3"><router-link :to="{ name: 'create-todo' }"
-                        class=" create-todo btn btn-primary position-fied" @click="getTags">
+
+            <ul class="dropdown-menu ">
+                <li class=" m-3"><router-link :to="{ name: 'create-todo' }" class=" create-todo btn btn-primary "
+                        @click="getTags">
                         Aggiungi
                         Todo
                     </router-link></li>
-                <li class="m-3"> <button type="button" class="btn btn-success position-ixed" data-bs-toggle="modal"
+                <li class="m-3"> <button type="button" class="btn btn-success " data-bs-toggle="modal"
                         data-bs-target="#addTagModal" :disabled="store.tags.length >= 10">
                         Aggiungi Tag
                     </button>
                 </li>
-                <li class="m-3"> <button type="button" class="btn btn-success positio-fixed" data-bs-toggle="modal"
+                <li class="m-3"> <button type="button" class="btn btn-success " data-bs-toggle="modal"
                         data-bs-target="#deleteTagModal" :disabled="store.tags.length == 0">
                         Elimina Tag
                     </button>
@@ -183,30 +187,12 @@ export default {
                         @click="logoutUser">
                         Logout </router-link></li>
 
-                <!-- <li><a class="dropdown-item" href="#">Something else here</a></li> -->
+
             </ul>
+
         </div>
         <TagModal :getTags="getTags" />
         <TagDeleteModal :getTags="getTags" />
-
-        <div>
-
-
-        </div>
-
-        <div>
-
-
-        </div>
-
-
-
-
-
-
-
-
-
 
 
 
@@ -216,7 +202,8 @@ export default {
             <select class="form-select" id="selectTag" aria-label="Example select with button addon"
                 v-model="selectedTag.tag" @change="filterTodos">
                 <option :value=null selected>Nessuno</option>
-                <option v-for="(tag, index) in store.tags" :key="tag.tag_id" :value="tag">{{ tag.tag_name }}</option>
+                <option v-for="(  tag, index  ) in   store.tags  " :key="tag.tag_id" :value="tag">{{ tag.tag_name }}
+                </option>
 
             </select>
         </div>
@@ -245,12 +232,11 @@ export default {
 .dropdown-menu {
     background-color: #ffffff00;
     border: none;
-    /* Cambia il colore di sfondo come desideri */
-    /* Altri stili desiderati per il menu a discesa */
+
 }
 
 .dropdown {
-    left: 3%;
+    left: 5%;
     bottom: 5%;
 }
 
@@ -261,16 +247,6 @@ export default {
 
 h2 {
     font-size: 2rem;
-}
-
-.logout {
-    bottom: 10%;
-    left: 3%
-}
-
-.create-todo {
-    bottom: 20%;
-    left: 3%;
 }
 
 

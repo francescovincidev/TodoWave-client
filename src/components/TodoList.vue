@@ -70,7 +70,7 @@ export default {
                     <li @click="handleLiClick(todo)" class="list-group-item"
                         :class="todo.expired ? (todo.completed ? 'completed' : 'expired') : (todo.completed ? 'completed' : 'incompleted')">
                         <span class="d-flex justify-content-between w-100">
-                            <span class="title">{{ todo.title }}</span>
+                            <span class="title text-break">{{ todo.title }}</span>
                             <span class="text-end">
                                 <i v-if="!todo.completed && todo.upcomingExpiration"
                                     class="fa-solid fa-triangle-exclamation" style="color: rgb(255, 234, 0);"></i>

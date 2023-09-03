@@ -51,6 +51,7 @@ export default {
           this.store.setError(error.response.data.error);
 
           if (error.response) {
+            console.log(error);
             this.errors = error.response.data.errors;
           }
           // this.errors = (error.response.data.errors);
@@ -72,8 +73,12 @@ export default {
     <form @submit.prevent="registerUser" class="center-form">
       <div class="position-relative">
         <label>Name:</label>
-        <input type="text" class="form-control" v-model="username" required>
-
+        <input type="text" class="form-control" minlength="2" maxlength="20"
+          :class="errors.usernames && !errors.inputs ? 'is-invalid' : ''" v-model="username" required>
+        <template v-if="errors && !errors.inputs">
+          <div class="position-absolute start-50 translate-middle invalid-feedback text-center" role="alert"
+            v-for="username in errors.usernames">{{ username }}</div>
+        </template>
       </div>
 
       <div class="position-relative">

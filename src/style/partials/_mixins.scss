@@ -9,12 +9,12 @@
 }
 
 @mixin animated_upcoming_expiration {
-    position: absolute;
+    position: fixed;
     top: -100px;
     left: 80%;
     transform: translateX(-50%);
     padding: 10px 20px;
-    animation: notification 15s ease-in-out;
+    animation: notification 10s ease-in-out;
 
 
 }

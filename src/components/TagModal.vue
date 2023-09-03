@@ -20,27 +20,10 @@ export default {
 
         upTag() {
             if (this.store.logged_id) {
-                const payload = {
+                axios.post(`${this.store.baseURL}/endpoints/tags_endpoints.php/create`, {
                     tag_name: this.tag_name,
-
-                };
-
-                let endpoint = '';
-                if (this.tag) {
-                    // Aggiungi il campo todo_id se this.todo è definito
-                    payload.tag_id = this.tag.tag_id;
-                    payload.user_id = this.store.logged_id;
-                    endpoint = `/update`;
-                } else {
-                    // Aggiungi il campo user_id se this.todo non è definito
-                    payload.user_id = this.store.logged_id;
-                    endpoint = '/create';
-                }
-
-                axios({
-                    method: this.tag ? 'PUT' : 'POST',
-                    url: `${this.store.baseURL}/endpoints/tags_endpoints.php${endpoint}`,
-                    data: payload,
+                    user_id: this.store.logged_id,
+                }, {
                     headers: {
                         'Content-Type': 'application/json'
                     }
@@ -86,10 +69,11 @@ export default {
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="deleteTodoModalLabel">{{ tag ? `Modifica il tag ${tag.tag_name} ` :
-                        'Crea nuovo tag' }}
+                    <h1 class="modal-title fs-5" id="deleteTodoModalLabel">
+                        Crea nuovo tag
                     </h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" @click="errors = [], tag_name = ''" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="position-relative">
@@ -108,9 +92,10 @@ export default {
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    <button type="button" class="btn btn-secondary" @click="errors = [], tag_name = ''"
+                        data-bs-dismiss="modal">Chiudi</button>
                     <button @click="upTag" type="button" class="btn btn-danger"
-                        :data-bs-dismiss="tag_name.length <= 20 && tag_name.length > 0 && !errors.length ? 'modal' : null">TAG</button>
+                        :data-bs-dismiss="tag_name.length <= 20 && tag_name.length > 0 && store.tags.length < 10 ? 'modal' : null">TAG</button>
                 </div>
             </div>
         </div>
@@ -121,9 +106,4 @@ export default {
 @use "../style/partials/mixins" as *;
 @use "../style/partials/variables" as *;
 @use "../style/general.scss" as *;
-
-.position-fixed {
-    bottom: 40%;
-    left: 3%;
-}
 </style>

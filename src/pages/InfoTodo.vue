@@ -60,40 +60,59 @@ export default {
     <template v-if="todo">
         <div class="info-container">
 
-            <h2 class="text-center">
+            <h2 class="text-center text-break">
                 {{ todo.title }}
 
             </h2>
-            <div class="description rounded bg-light bg-opacity-50 p-3">
+            <div class="description rounded bg-light bg-opacity-50 p-3 m-3  text-break">
 
                 {{ todo.description ? todo.description : 'Nessuna descrizione' }}
             </div>
-            <div>
+            <div class="m-3" v-if="todo.upcomingExpiration && !todo.completed">
+                <span class="fw-semibold text-danger">
 
-                Data di scadenza:
+                    ATTENZIONE SCADE ENTRO TRE GIORNI
+                </span>
+            </div>
+            <div class="m-3">
+
+                <span class="fw-semibold">
+
+                    Data di scadenza:
+                </span>
                 {{ todo.deadline ? todo.deadline : 'Nessuna scadenza' }}
             </div>
-            <div>
-                Completato? {{ todo.completed ? 'Si' : 'No' }}
+            <div class="m-3">
+                <span class="fw-semibold">
+                    Completato?
+
+                </span>
+                {{ todo.completed ? 'Si' : 'No' }}
             </div>
-            <div>
-                Tag: <span class="badge bg-secondary me-2" v-for="tag in todo.tags">{{ tag.tag_name }} </span>
-            </div>
-            <div v-if="todo.upcomingExpiration && !todo.completed">
-                ATTENZIONE SCADE ENTRO TRE GIORNI
-            </div>
-            <div v-if="todo.expired">
-                Stato: {{ todo.completed ? 'Scaduto e completato' : 'Scaduto e non completato' }}
+            <div class="m-3" v-if="todo.tags.length">
+                <span class="fw-semibold">
+                    Tag:
+                </span>
+                <span class="badge bg-success me-2" v-for="tag in todo.tags">{{ tag.tag_name }} </span>
             </div>
 
+            <div class="m-3" v-if="todo.expired">
+                <span class="fw-semibold">
+                    Stato:
+                </span>
+                {{ todo.completed ? 'Scaduto e completato' : 'Scaduto e non completato' }}
+            </div>
 
-            <router-link :to="{ name: 'edit-todo', params: { slug: todo.todo_id } }"
-                class="btn btn-primary">EDIT</router-link>
-            <!-- <div class="btn btn-danger" @click="deleteTodo">ELIMINA</div> -->
+            <div class="d-flex justify-content-center gap-4">
 
-            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteTodoModal">
-                ELIMINA
-            </button>
+                <router-link :to="{ name: 'edit-todo', params: { slug: todo.todo_id } }"
+                    class="btn btn-primary">Modifica</router-link>
+
+
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteTodoModal">
+                    ELIMINA
+                </button>
+            </div>
             <!-- Modal -->
             <div class="modal fade" id="deleteTodoModal" tabindex="-1" aria-labelledby="deleteTodoModalLabel"
                 aria-hidden="true">

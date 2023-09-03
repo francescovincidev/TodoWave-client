@@ -98,7 +98,7 @@ export default {
     <template v-else>
         <div class="container infos">
 
-            <h1 class="mt-4">{{ todo ? 'Modifica ' + todo.title : 'Crea un nuovo todo' }}</h1>
+            <h1 class="mt-4 text-break">{{ todo ? 'Modifica ' + todo.title : 'Crea un nuovo todo' }}</h1>
             <div class="center-container">
 
                 <form @submit.prevent="upTodo" class=" center-form">
