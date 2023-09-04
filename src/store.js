@@ -14,8 +14,7 @@ export const store = reactive({
     notification: '',
     error: '',
     upcomingExpirationCount: 0,
-    refreshTodos(data, tag_id = null) {
-
+    refreshTodos(data) {
         this.todos.activeTodos = [];
         this.todos.expiredTodos = [];
         this.upcomingExpirationCount = 0;
@@ -23,32 +22,30 @@ export const store = reactive({
 
         data.forEach(todo => {
             const targetDate = todo.deadline ? new Date(todo.deadline) : null;
+            if (targetDate) {
+                const threeDaysBefore = new Date();
+                threeDaysBefore.setDate(currentDate.getDate() + 3);
 
-            // Aggiungi una condizione per controllare se il todo ha il tag_id desiderato
-            const hasDesiredTag = tag_id === null || (todo.tags && todo.tags.some(tag => tag.tag_id === tag_id));
-
-            if (hasDesiredTag) {
-                if (targetDate) {
-                    const threeDaysBefore = new Date();
-                    threeDaysBefore.setDate(currentDate.getDate() + 3);
-
-                    if (targetDate <= currentDate) {
-                        todo.expired = true;
-                        this.todos.expiredTodos.push(todo);
-                    } else if (targetDate <= threeDaysBefore) {
-                        todo.upcomingExpiration = true;
-                        this.upcomingExpirationCount++;
-                        this.todos.activeTodos.push(todo);
-                    } else {
-                        this.todos.activeTodos.push(todo);
-                    }
-                } else if (!targetDate) {
+                if (targetDate <= currentDate) {
+                    todo.expired = true;
+                    this.todos.expiredTodos.push(todo);
+                } else if (targetDate <= threeDaysBefore) {
+                    todo.upcomingExpiration = true;
+                    this.upcomingExpirationCount++;
                     this.todos.activeTodos.push(todo);
+
+                } else {
+                    this.todos.activeTodos.push(todo);
+
                 }
+
+            } else if (!targetDate) {
+                this.todos.activeTodos.push(todo);
+
             }
         });
-    }
-    ,
+    },
+
 
     timeoutNotification: null,
     setNotification(notification) {

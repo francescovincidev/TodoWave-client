@@ -1,7 +1,7 @@
 <script>
 import axios from "axios";
 import { store } from "../store";
-// import { onMounted } from "vue";
+
 
 export default {
     name: "TodoList",
@@ -19,7 +19,7 @@ export default {
                 this.updateCompleted(todo);
             }
         },
-        //Aggiorna il completed del click
+        //Aggiorna il completed al click
         updateCompleted(todo) {
 
             if (this.store.logged_id) {
@@ -36,15 +36,14 @@ export default {
                 })
                     .then(response => {
                         this.errors = [];
-                        // console.log('Todo aggiornato');
                         this.getTodos();
                     })
                     .catch(error => {
                         this.errors = [];
 
-                        this.store.setError(error.response.data.error);
 
                         if (error.response) {
+                            this.store.setError(error.response.data.error);
                             this.errors = error.response.data.errors;
                         }
 
@@ -85,21 +84,12 @@ export default {
                 </template>
             </ul>
         </template>
-        <!-- </template> -->
-
-
-
-
-
-
-
-
     </template>
 </template>
 
 <style  scoped lang="scss">
 .list {
-    // min-width: 40%;
+
     width: 40%;
     max-height: 250px;
     overflow-y: auto;

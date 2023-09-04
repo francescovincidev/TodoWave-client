@@ -5,19 +5,17 @@ import { reactive, onMounted } from "vue";
 import TodoList from "../components/TodoList.vue";
 import TagModal from "../components/TagModal.vue";
 import TagDeleteModal from "../components/TagDeleteModal.vue"
+import NotLogged from "../components/NotLogged.vue";
 
 
 export default {
     name: "Todos",
     components: {
-        TodoList, TagModal, TagDeleteModal
+        TodoList, TagModal, TagDeleteModal, NotLogged
     },
     data() {
         return {
-            email: '',
-            password: '',
-            username: '',
-            passwordRepeat: '',
+
             errors: [],
             selectedTag: {
                 tag: null,
@@ -25,15 +23,14 @@ export default {
                 expiredTodos: [],
 
             },
-
-            // upcomingExpirationCount: null,
             store
 
         }
     },
     methods: {
 
-        getTodos(tag_id = null) {
+        // PRENDIAMO I TODOS E LI MANDIAMO A REFRESH TODOS PER LA DIVISIONE In SCADUTI E ATTIVI
+        getTodos() {
             if (this.store.logged_id) {
 
                 axios.get(`${this.store.baseURL}/endpoints/todos_endpoints.php/get`, {
@@ -48,15 +45,20 @@ export default {
                         console.log('Todos raccolti:', response.data);
                         const todos = response.data;
 
-                        this.store.refreshTodos(todos, tag_id);
+                        this.store.refreshTodos(todos);
                     })
                     .catch(error => {
-                        this.store.setError(error.response.data.error);
+
+                        if (error.response) {
+                            this.store.setError(error.response.data.error);
+                            this.errors = error.response.data.errors;
+                        }
 
 
                     });
             }
         },
+        // PRENDIAMO I TAGS E LI CARICHIAMO NELLO STORE
         getTags() {
             if (this.store.logged_id) {
                 this.store.tags = [];
@@ -69,21 +71,18 @@ export default {
                     }
                 })
                     .then(response => {
-                        console.log('Tags raccolti:', response.data);
-                        this.store.tags = response.data;
-                        console.log(response.data);
-                        // const todos = response.data;
 
-                        // this.store.refreshTodos(todos);
+                        this.store.tags = response.data;
+
                     })
                     .catch(error => {
                         this.store.setError(error.response.data.error);
-
 
                     });
             }
 
         },
+        // LOGOUT
         logoutUser() {
             this.store.logged_id = null;
             this.store.username = null;
@@ -91,17 +90,14 @@ export default {
             this.store.todos.expiredTodos = [];
             this.store.tags = [];
             this.store.setNotification('Logout eseguito');
-
-            // store.notification = 'Logout eseguito'
-
         },
+
+        // FILTRIMO I TODOS IN BASE AL TAG SCELTO
         filterTodos() {
 
-
             if (this.selectedTag.tag) {
-                // this.getTodos()
-                // Se nessun tag è selezionato, mostra tutti i todo
-                // Altrimenti, filtra i todo per il tag selezionato
+
+                // FILTRIAMO I TODOS DELLO STORE CONTROLLANDO SE UNO DEI LORO TAG CORRISPONDE A QUELLO SELEZIONATO
                 this.selectedTag.activeTodos = this.store.todos.activeTodos.filter(todo => {
                     return todo.tags.some(tag => tag.tag_id === this.selectedTag.tag.tag_id);
                 });
@@ -114,8 +110,6 @@ export default {
                 this.selectedTag.expiredTodos = [];
 
             }
-            // this.getTodos()
-
 
         },
 
@@ -124,7 +118,6 @@ export default {
         this.getTodos();
         this.getTags();
 
-        // this.upcomingExpirationCount = this.store.todos.activeTodos.filter(todo => todo.upcomingExpiration).length;
     }
 
 
@@ -133,7 +126,7 @@ export default {
 
 <template>
     <template v-if="!store.logged_id">
-        <h2>ERRORE Non sei Loggato</h2>
+        <NotLogged />
     </template>
     <template v-else>
 
@@ -143,16 +136,17 @@ export default {
             tornato ${store.username} ` : `Benvenuto ${store.username} non hai ancora Todo. Aggiungine qualcuno` }}</h3>
         <div class=" d-flex flex-column align-items-center">
 
-            <h3 v-if="selectedTag.tag">{{ (selectedTag.activeTodos.length > 0 || selectedTag.expiredTodos.length > 0) ?
+            <h3 v-if="selectedTag.tag">{{ (selectedTag.activeTodos.length || selectedTag.expiredTodos.length) ?
                 `Ecco i Todo filtrati per:
                 ${selectedTag.tag.tag_name}` : `Nessun Todo con tag: ${selectedTag.tag.tag_name}` }}</h3>
 
-            <template v-if="selectedTag.tag ? selectedTag.activeTodos.length > 0 : store.todos.activeTodos.length > 0">
+            <!-- TAG ATTIVI E SCADUTI -->
+            <template v-if="selectedTag.tag ? selectedTag.activeTodos.length : store.todos.activeTodos.length">
                 <h2 class="mt-2">TODO ATTIVI</h2>
                 <TodoList :getTodos="getTodos"
                     :todos="selectedTag.tag ? selectedTag.activeTodos : store.todos.activeTodos" />
             </template>
-            <template v-if="selectedTag.tag ? selectedTag.expiredTodos.length > 0 : store.todos.expiredTodos.length > 0">
+            <template v-if="selectedTag.tag ? selectedTag.expiredTodos.length : store.todos.expiredTodos.length">
                 <h2 class="mt-2">TODO SCADUTI</h2>
 
                 <TodoList :getTodos="getTodos"
@@ -264,6 +258,5 @@ h2 {
         white-space: nowrap;
     }
 
-    // left: 75%;
 }
 </style>

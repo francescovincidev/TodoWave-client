@@ -1,10 +1,13 @@
 <script>
 import axios from "axios";
 import { store } from "../store";
-// import { onMounted } from "vue";
+import NotLogged from "../components/NotLogged.vue";
 
 export default {
     name: "InfoTodo",
+    components: {
+        NotLogged
+    },
     data() {
         return {
             store,
@@ -139,7 +142,7 @@ export default {
 
     </template>
     <template v-else>
-        <h2>ERRORE Non sei Loggato</h2>
+        <NotLogged />
 
 
     </template>

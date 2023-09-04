@@ -1,7 +1,7 @@
 <script>
 import axios from "axios";
 import { store } from "../store";
-// import { onMounted } from "vue";
+
 
 export default {
     name: "TagModal",
@@ -11,7 +11,7 @@ export default {
         return {
             store,
             tag_name: '',
-            tag: null,
+            // tag: null,
             errors: []
 
         }
@@ -36,8 +36,6 @@ export default {
                         this.getTags();
                         this.tag_name = '';
 
-                        // this.$router.push('/todos',);
-
                     })
                     .catch(error => {
                         this.errors = [];
@@ -52,12 +50,6 @@ export default {
 
 
         }
-    },
-    mounted() {
-        // this.errors = []
-
-
-
     }
 
 }
@@ -94,8 +86,8 @@ export default {
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @click="errors = [], tag_name = ''"
                         data-bs-dismiss="modal">Chiudi</button>
-                    <button @click="upTag" type="button" class="btn btn-danger"
-                        :data-bs-dismiss="tag_name.length <= 20 && tag_name.length > 0 && store.tags.length < 10 ? 'modal' : null">TAG</button>
+                    <button @click="upTag" type="button" class="btn btn-success"
+                        :data-bs-dismiss="tag_name.length <= 20 && tag_name.length > 0 && store.tags.length < 10 ? 'modal' : null">AGGIUNGI</button>
                 </div>
             </div>
         </div>

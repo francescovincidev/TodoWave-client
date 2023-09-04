@@ -1,29 +1,21 @@
 <script>
-import axios from "axios";
-import { store } from "../store";
-import { onMounted } from "vue";
-// import { RouterLink } from "vue-router";
-// import TodoList from "../components/TodoList.vue";
 
 export default {
     name: "HomePage",
     data() {
         return {
-            store
+
         };
-    },
-    // components: { RouterLink },
-
-    mounted() {
-
     }
 }
 </script>
 
 <template>
-    <!-- <div class="lamo">lamo</div> -->
+    <!-- TITOLO -->
     <h1>TodoWave</h1>
     <h4>Ciao e benvenuto su TodoWave, dove le tue attività incontrano la semplicità!</h4>
+
+    <!-- DESCRIZIONE -->
     <p>Hai mai avuto quella lista interminabile di cose da fare? Tranquillo, siamo qui per rendere tutto più facile e
         divertente! </p>
     <p>Tieni traccia dei tuoi compiti quotidiani - è come annotare tutto su un taccuino virtuale. E quando hai completato
@@ -34,13 +26,11 @@ export default {
         il tuo assistente personale per ricordarti di dare un'occhiata alle cose importanti in programma!</p>
     <p>E se hai diverse categorie di attività, non c'è problema! Puoi organizzarle aggiungendo delle etichette.</p>
 
+    <!-- SEZIONE LOGIN/REGISTRAZIONE -->
     <div class="cta-buttons d-flex justify-content-around">
         <div class="cta-button">
-
             <p class="cta-caption">Sei già parte di TodoWave? Accedi e inizia!</p>
             <router-link :to="{ name: 'login' }" class="btn btn-primary">Entra</router-link>
-
-
         </div>
 
         <div class="cta-button">
@@ -72,25 +62,5 @@ p {
     font-size: 1.1rem;
 
 
-}
-
-.cta-buttons {
-    font-size: 0.9rem;
-    width: 80%;
-    margin: 0 auto;
-
-    .cta-button {
-        text-align: center;
-        margin: 0 1rem;
-    }
-
-    .cta-caption {
-        color: #3a6f81;
-
-        /* color: #888888; */
-        margin-top: 0.5rem;
-        margin-bottom: 0.2rem;
-        font-size: 0.9rem;
-    }
 }
 </style>

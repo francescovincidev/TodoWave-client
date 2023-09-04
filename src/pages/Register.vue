@@ -16,19 +16,7 @@ export default {
   },
   methods: {
     registerUser() {
-      // //Controlliamo se le password corrispondono
-      // if (this.password.length === 0 || this.passwordRepeat.length === 0) {
-      //   this.errors = {
-      //     inputs: ["Tutti i campi sono obbligatori"]
-      //   }
-      //   return; // Interrompiamo la registrazione se le password non corrispondono
-      // } else if (this.password !== this.passwordRepeat) {
-      //   this.errors = {
-      //     passwordsRepeat: ["Le due password non corrispondono"]
-      //   }
-      //   return;
 
-      // }
       axios.post(`${this.store.baseURL}/endpoints/user_endpoints.php/register`, {
         email: this.email,
         password: this.password,
@@ -36,7 +24,7 @@ export default {
         username: this.username
       }, {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/json'
         }
       })
         .then(response => {
@@ -54,7 +42,6 @@ export default {
             console.log(error);
             this.errors = error.response.data.errors;
           }
-          // this.errors = (error.response.data.errors);
         });
     }
   }
@@ -72,7 +59,7 @@ export default {
 
     <form @submit.prevent="registerUser" class="center-form">
       <div class="position-relative">
-        <label>Name:</label>
+        <label>Nome:</label>
         <input type="text" class="form-control" minlength="2" maxlength="20"
           :class="errors.usernames && !errors.inputs ? 'is-invalid' : ''" v-model="username" required>
         <template v-if="errors && !errors.inputs">
@@ -117,8 +104,6 @@ export default {
           {{ input }}</div>
       </template>
 
-
-      <!-- <button type="submit" class="btn btn-success mt-4">Registrati</button> -->
       <div class="d-flex justify-content-center">
         <button type="submit" class="btn btn-success mt-3">Registrati</button>
       </div>
@@ -133,8 +118,4 @@ export default {
   </div>
 </template>
 
-<style lang="scss">
-// .nowrap {
-//   white-space: nowrap;
-// }
-</style>
+<style lang="scss"></style>

@@ -20,7 +20,7 @@ export default {
 
             }, {
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
+                    'Content-Type': 'application/json'
                 }
             })
                 .then(response => {
@@ -46,17 +46,19 @@ export default {
 
 <template>
     <div class="container credentials">
+        <!-- TITOLO -->
         <h1 class="mt-4">TodoWave</h1>
 
         <p class="text-center">
             Effettua il login per recuperare la tua todo
         </p>
 
+        <!-- FORM -->
         <form @submit.prevent="loginUser" class="center-form">
             <div class="position-relative">
                 <label>Email:</label>
-                <input type="email" class="form-control" :class="errors.emails && !errors.inputs ? 'is-invalid' : ''"
-                    v-model="email" required>
+                <input type="email" class="form-control"
+                    :class="errors && errors.emails && !errors.inputs ? 'is-invalid' : ''" v-model="email" required>
                 <template v-if="errors && !errors.inputs">
                     <div class="position-absolute start-50 translate-middle invalid-feedback" role="alert"
                         v-for="email in errors.emails">{{ email }}</div>
@@ -66,22 +68,20 @@ export default {
             <div class="position-relative">
 
                 <label>Password:</label>
-                <input type="password" class="form-control" :class="errors.passwords && !errors.inputs ? 'is-invalid' : ''"
-                    v-model="password" required>
+                <input type="password" class="form-control"
+                    :class="errors && errors.passwords && !errors.inputs ? 'is-invalid' : ''" v-model="password" required>
             </div>
 
             <template v-if="errors">
                 <div class="text-danger" v-for="input in errors.inputs">{{ input }}</div>
             </template>
 
-            <!-- <button type="submit" class="btn btn-primary d-block mt-3">Loggati</button> -->
+
             <div class="d-flex justify-content-center">
                 <button type="submit" class="btn btn-primary mt-3">Loggati</button>
             </div>
         </form>
-        <!-- </div> -->
 
-        <!-- <div class="col-4"> -->
 
         <div class="register center-form mt-5 position-absolute">Non sei registrato? Registrati
             <div class="text-center">
