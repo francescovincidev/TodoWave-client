@@ -1,9 +1,9 @@
 <script>
-import axios from "axios";
+
 import { store } from "../store";
 import TodoForm from "../components/TodoForm.vue";
 
-// import { onMounted } from "vue";
+
 
 export default {
     name: "EditTodo",
@@ -14,11 +14,7 @@ export default {
         return {
             store
         }
-    },
-    methods: {
-
     }
-
 }
 </script>
 

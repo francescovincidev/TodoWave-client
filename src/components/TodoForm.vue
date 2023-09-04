@@ -1,11 +1,13 @@
 <script>
 import axios from "axios";
 import { store } from "../store";
-// import { onMounted } from "vue";
-
+// import NotFound from "../pages/NotFound.vue";
+import NotLogged from "./NotLogged.vue";
 export default {
     name: "TodoForm",
-
+    components: {
+        NotLogged
+    },
     data() {
         return {
             title: '',
@@ -15,7 +17,6 @@ export default {
             errors: {},
             todo: null,
             selectedTags: [],
-            // removedTags: [],
             store
 
         }
@@ -30,6 +31,7 @@ export default {
                     deadline: this.deadline ? this.deadline : 0,
                     completed: this.completed ? 1 : 0,
                     tags_add: this.selectedTags,
+                    // Filtriamo  i tags dello store in modo tale che siano quelli non selezionati su selectedTags
                     tags_remove: this.store.tags.filter(tag => !this.selectedTags.includes(tag.tag_id)).map(tag => tag.tag_id)
                 };
 
@@ -55,7 +57,7 @@ export default {
                 })
                     .then(response => {
                         this.errors = [];
-                        // console.log(response.data);
+
                         this.store.setNotification(response.data.message);
 
                         this.$router.push('/todos',);
@@ -84,6 +86,7 @@ export default {
             this.description = this.todo.description;
             this.deadline = this.todo.deadline;
             this.completed = this.todo.completed ? true : false;
+            // Prendiamo gli ID dei tags
             this.selectedTags = this.todo.tags.map(tag => tag.tag_id);
         }
     }
@@ -93,7 +96,7 @@ export default {
 
 <template>
     <template v-if="!store.logged_id">
-        <h2>ERRORE Non sei Loggato</h2>
+        <NotLogged />
     </template>
     <template v-else>
         <div class="container infos">
@@ -106,9 +109,8 @@ export default {
 
                     <div class="position-relative">
                         <label>Titolo</label>
-                        <input type="text" class="form-control"
-                            :class="errors && errors.titles && !errors.inputs ? 'is-invalid' : ''" v-model="title"
-                            minlength="3" maxlength="100" required>
+                        <input type="text" class="form-control" :class="errors.titles && !errors.inputs ? 'is-invalid' : ''"
+                            v-model="title" minlength="3" maxlength="100" required>
                         <template v-if="errors && !errors.inputs">
                             <div class="error-message invalid-feedback" role="alert" v-for="  title  in  errors.titles ">{{
                                 title }}
@@ -120,8 +122,7 @@ export default {
                     <div class="position-relative">
 
                         <label>Descrizione</label>
-                        <textarea class="form-control"
-                            :class="errors && errors.descriptions && !errors.inputs ? 'is-invalid' : ''"
+                        <textarea class="form-control" :class="errors.descriptions && !errors.inputs ? 'is-invalid' : ''"
                             v-model="description" maxlength="1000" rows="4"></textarea>
                         <template v-if="errors && !errors.inputs">
                             <div class="error-message invalid-feedback" role="alert"
@@ -136,24 +137,23 @@ export default {
 
                                 <label for="">Scadenza</label>
                                 <input type="date" class="form-control"
-                                    :class="errors && errors.deadlines && !errors.inputs ? 'is-invalid' : ''"
-                                    v-model="deadline">
+                                    :class="errors.deadlines && !errors.inputs ? 'is-invalid' : ''" v-model="deadline">
                                 <template v-if="errors && !errors.inputs">
                                     <div class="error-message invalid-feedback" role="alert"
                                         v-for=" deadline  in  errors.deadlines ">{{
                                             deadline }}</div>
                                 </template>
                             </span>
-                            <div @click="deadline = ''" class="btn btn-primary ms-4">Resetta la data</div>
+                            <div @click="deadline = ''" class="btn btn-primary ms-4">Ripristina la data</div>
                         </template>
 
 
                     </div>
 
                     <div class="position-relative">
-                        <label for="opzione">Todo già completata?:</label>
-                        <input type="checkbox" id="completed"
-                            :class="errors && errors.completeds && !errors.inputs ? 'is-invalid' : ''" name="completed"
+                        <label for="completed">Todo già completata? </label>
+                        <input class="form-check-input" type="checkbox" id="completed"
+                            :class="errors.completeds && !errors.inputs ? 'is-invalid' : ''" name="completed"
                             v-model="completed">
                         <template v-if="errors && !errors.inputs">
                             <div class="error-message invalid-feedback" role="alert"
@@ -195,7 +195,7 @@ export default {
 
 <style scoped lang="scss">
 .form-check-label {
-    // overflow-wrap: break-word;
+
     word-wrap: break-word;
 
 }
@@ -217,11 +217,11 @@ export default {
         .error-message {
             position: absolute;
             bottom: 0px;
-            /* Posiziona l'errore sotto l'input */
+
             left: 0;
             font-size: 0.75rem;
             color: red;
-            /* o il colore che preferisci */
+
         }
 
         input {
@@ -234,7 +234,7 @@ export default {
 
             &::-webkit-scrollbar {
                 display: none;
-                /* Nasconde la scrollbar su browser basati su WebKit (Chrome, Safari, etc.) */
+                /* Nasconde la scrollbar  */
             }
         }
 

@@ -1,7 +1,6 @@
 <script>
 import axios from "axios";
 import { store } from "../store";
-// import { onMounted } from "vue";
 
 export default {
     name: "TagDeleteModal",
@@ -11,7 +10,6 @@ export default {
         return {
             tagsToDelete: [],
             store,
-
             errors: []
 
         }
@@ -30,18 +28,17 @@ export default {
             })
                 .then(response => {
                     this.errors = [];
-                    console.log(response.data);
+
 
                     this.store.setNotification(response.data.message);
+                    // AGGIORNIAMO I TAGS
                     this.getTags();
 
-
-                    // this.$router.push(`/todos`);
                 })
                 .catch(error => {
                     this.errors = [];
                     this.store.setError(error.response.data.error);
-                    console.log(error);
+
                     if (error.response) {
                         this.errors = error.response.data.errors;
                     }
@@ -85,7 +82,8 @@ export default {
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                    <button @click="deleteTags" type="button" class="btn btn-danger" data-bs-dismiss="modal">TAG</button>
+                    <button @click="deleteTags" type="button" class="btn btn-danger"
+                        data-bs-dismiss="modal">ELIMINA</button>
                 </div>
             </div>
         </div>
