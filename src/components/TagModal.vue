@@ -87,7 +87,7 @@ export default {
                     <button type="button" class="btn btn-secondary" @click="errors = [], tag_name = ''"
                         data-bs-dismiss="modal">Chiudi</button>
                     <button @click="upTag" type="button" class="btn btn-success"
-                        :data-bs-dismiss="tag_name.length <= 20 && tag_name.length > 0 && store.tags.length < 10 ? 'modal' : null">AGGIUNGI</button>
+                        :data-bs-dismiss="tag_name.length <= 20 && tag_name.length >= 3 && store.tags.length < 10 ? 'modal' : null">AGGIUNGI</button>
                 </div>
             </div>
         </div>
